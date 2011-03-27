@@ -31,23 +31,14 @@ import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Bank;
 import com.nijiko.coelho.iConomy.system.Account;
 
-/**
-* iConomyDeath plugin for Bukkit
-*
-* @author halvors
-*/
-
-public class iConomyDeathPlayerListener extends PlayerListener
-{
+public class iConomyDeathPlayerListener extends PlayerListener {
     private final iConomyDeath plugin;
 
-    public iConomyDeathPlayerListener(iConomyDeath instance)
-	{
+    public iConomyDeathPlayerListener(iConomyDeath instance) {
         plugin = instance;
     }
     
-    public void onPlayerRespawn(PlayerRespawnEvent event)
-	{
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
     
 		if (iConomy.getBank().hasAccount(player.getName())) {

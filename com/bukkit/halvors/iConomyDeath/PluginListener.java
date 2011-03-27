@@ -25,19 +25,12 @@ import org.bukkit.plugin.Plugin;
 
 import com.nijiko.coelho.iConomy.iConomy;
 
-/**
- * Checks for plugins whenever one is enabled
- */
-
-public class PluginListener extends ServerListener
-{
-    public PluginListener() 
-	{
+public class PluginListener extends ServerListener {
+    public PluginListener() {
 	}
 
     @Override
-    public void onPluginEnabled(PluginEvent event)
-	{
+    public void onPluginEnabled(PluginEvent event) {
         if(iConomyDeath.getiConomy() == null) {
             Plugin iConomy = iConomyDeath.getBukkitServer().getPluginManager().getPlugin("iConomy");
 

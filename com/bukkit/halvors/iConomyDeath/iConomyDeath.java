@@ -25,7 +25,6 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 
 import java.io.File;
 import java.util.logging.Logger;
-import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.Server;
@@ -38,23 +37,19 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
-public class iConomyDeath extends JavaPlugin
-{
-
+public class iConomyDeath extends JavaPlugin {
 	private static PluginListener PluginListener = null;
     private static iConomy iConomy = null;
     private static Server Server = null;
 
     public static PermissionHandler Permissions;
     
+    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
+    
     private PluginManager pm;
     private Logger log;
     private Configuration config;
-
-    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
-    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
-
-    
+ 
     // Config variables
     public double Amount = 64;
     
@@ -136,17 +131,5 @@ public class iConomyDeath extends JavaPlugin
             return false;
         }
         return true;
-    }
-    
-    public boolean isDebugging(final Player player) {
-        if (debugees.containsKey(player)) {
-            return debugees.get(player);
-        } else {
-            return false;
-        }
-    }
-
-    public void setDebugging(final Player player, final boolean value) {
-        debugees.put(player, value);
     }
 }
