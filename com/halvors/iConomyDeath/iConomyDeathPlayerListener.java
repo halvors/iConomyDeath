@@ -19,6 +19,7 @@
 
 package com.bukkit.halvors.iConomyDeath;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -49,7 +50,7 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 				account.subtract(amount);
 				account.save();
     
-				player.sendMessage("[iConomyDeath] " + iConomy.getBank().format(amount) + " was removed from your iConomy account because you was killed!");
+				player.sendMessage("[" + ChatColor.YELLOW + "iConomyDeath" + "] " + iConomy.getBank().format(amount) + " was removed from your iConomy account because you was killed!");
 			}
 		}
     }
