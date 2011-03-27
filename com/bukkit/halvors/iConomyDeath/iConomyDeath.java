@@ -5,6 +5,7 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
@@ -16,7 +17,9 @@ import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
+
+import com.bukkit.halvors.iConomyDeath.DefaultConfiguration;
+import com.bukkit.halvors.iConomyDeath.ConfigurationHandler;
 
 /**
  * iConomyDeath plugin for Bukkit
@@ -25,7 +28,9 @@ import org.bukkit.util.config.Configuration;
  */
 
 public class iConomyDeath extends JavaPlugin {
-
+	
+    public DefaultConfiguration config;
+    
 	private static PluginListener PluginListener = null;
     private static iConomy iConomy = null;
     private static Server Server = null;
@@ -61,6 +66,24 @@ public class iConomyDeath extends JavaPlugin {
     }
 
     public void onEnable() {
+    	
+        // Create files.
+    	getDataFolder().mkdirs();
+    	
+    	try {
+    		(new File(getDataFolder(), "config.yml")).createNewFile();
+    	} catch (IOException ex) {
+    	}
+
+        // Initilize configuration.
+        config = new ConfigurationHandler(getConfiguration());
+
+        // Load Configuration File
+        getConfiguration().load();
+
+        // Load Configuration Settings
+        config.load();
+    	
         // Register our events
         PluginManager pm = getServer().getPluginManager();
         Server = getServer();
