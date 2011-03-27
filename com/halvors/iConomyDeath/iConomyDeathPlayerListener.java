@@ -17,7 +17,7 @@
  * along with iConomyDeath.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bukkit.halvors.iConomyDeath;
+package com.halvors.iConomyDeath;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -50,7 +50,7 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 				account.subtract(amount);
 				account.save();
     
-				player.sendMessage("[" + ChatColor.YELLOW + "iConomyDeath" + "] " + iConomy.getBank().format(amount) + " was removed from your iConomy account because you was killed!");
+				player.sendMessage("[iConomyDeath] " + iConomy.getBank().format(amount) + " was removed from your iConomy account because you was killed!");
 			}
 		}
     }

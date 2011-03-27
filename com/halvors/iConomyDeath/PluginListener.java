@@ -17,7 +17,7 @@
  * along with iConomyDeath.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bukkit.halvors.iConomyDeath;
+package com.halvors.iConomyDeath;
 
 import org.bukkit.event.server.PluginEvent;
 import org.bukkit.event.server.ServerListener;
