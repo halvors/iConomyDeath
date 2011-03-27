@@ -34,7 +34,7 @@ public class iConomyDeathPlayerListener extends PlayerListener
 		if (iConomy.getBank().hasAccount(player.getName())) {
 			if (plugin.hasPermissions(player, "iConomyDeath.use")) {
 				Account account = iConomy.getBank().getAccount(player.getName());
-				double amount = plugin.config.Amount;
+				double amount = 64.0;//plugin.Amount;
 		
 				account.subtract(amount);
 				account.save();
