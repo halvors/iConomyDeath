@@ -24,6 +24,7 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
@@ -44,18 +45,15 @@ public class iConomyDeath extends JavaPlugin {
 
     public static PermissionHandler Permissions;
     
-    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
-    
-    private PluginManager pm;
-    private Logger log;
     private Configuration config;
+    
+    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
+    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
  
     // Config variables
     public double Amount = 64;
     
     public void onEnable() {
-    	pm = getServer().getPluginManager();
-    	log = getServer().getLogger();
     	config = getConfiguration();
     	Server = getServer();
         PluginListener = new PluginListener();
@@ -68,7 +66,8 @@ public class iConomyDeath extends JavaPlugin {
         // Load Configuration Settings
         loadConfig();
 
-        // Register our events    
+        // Register our events
+        PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
 
@@ -84,6 +83,8 @@ public class iConomyDeath extends JavaPlugin {
 
         // EXAMPLE: Custom code, here we just output some info so we can check all is well
         //System.out.println("Goodbye world!");
+    	
+    	System.out.println("");
     }
     
     private void loadConfig() {
@@ -131,5 +132,17 @@ public class iConomyDeath extends JavaPlugin {
             return false;
         }
         return true;
+    }
+    
+    public boolean isDebugging(final Player player) {
+        if (debugees.containsKey(player)) {
+            return debugees.get(player);
+        } else {
+            return false;
+        }
+    }
+
+    public void setDebugging(final Player player, final boolean value) {
+        debugees.put(player, value);
     }
 }
