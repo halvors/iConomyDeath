@@ -19,7 +19,7 @@
 
 package com.halvors.iConomyDeath;
 
-import org.bukkit.event.server.PluginEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
@@ -30,12 +30,12 @@ public class PluginListener extends ServerListener {
 	}
 
     @Override
-    public void onPluginEnabled(PluginEvent event) {
-        if(iConomyDeath.getiConomy() == null) {
+    public void onPluginEnable(PluginEnableEvent event) {
+        if (iConomyDeath.getiConomy() == null) {
             Plugin iConomy = iConomyDeath.getBukkitServer().getPluginManager().getPlugin("iConomy");
 
             if (iConomy != null) {
-                if(iConomy.isEnabled()) {
+                if (iConomy.isEnabled()) {
                 	iConomyDeath.setiConomy((iConomy)iConomy);
                     System.out.println("[iConomyDeath] Successfully linked with iConomy.");
                 }

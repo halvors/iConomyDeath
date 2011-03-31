@@ -20,16 +20,12 @@
 package com.halvors.iConomyDeath;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.nijiko.coelho.iConomy.iConomy;
-import com.nijiko.coelho.iConomy.system.Bank;
 import com.nijiko.coelho.iConomy.system.Account;
 
 public class iConomyDeathPlayerListener extends PlayerListener {
@@ -43,15 +39,14 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 		Player player = event.getPlayer();
     
 		if (iConomy.getBank().hasAccount(player.getName())) {
-			if (plugin.hasPermissions(player, "iConomyDeath.use")) {
+			if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
 				Account account = iConomy.getBank().getAccount(player.getName());
-				double amount = 64.0;//plugin.Amount;
-		
-				account.subtract(amount);
-				account.save();
+				account.subtract(plugin.Amount);
     
-				player.sendMessage("[iConomyDeath] " + iConomy.getBank().format(amount) + " was removed from your iConomy account because you was killed!");
+				player.sendMessage(ChatColor.YELLOW + iConomy.getBank().format(plugin.Amount) + " was taken from your account because you were killed");
 			}
+		} else {
+			player.sendMessage(ChatColor.RED + "Can't take money from your account because you do not have one");
 		}
     }
 }
