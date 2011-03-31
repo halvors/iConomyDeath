@@ -19,24 +19,24 @@
 
 package com.halvors.iConomyDeath;
 
-import com.nijiko.coelho.iConomy.iConomy;
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
-import org.bukkit.Server;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
+import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
+
+import com.nijiko.coelho.iConomy.iConomy;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class iConomyDeath extends JavaPlugin {
 	private static PluginListener PluginListener = null;
@@ -46,17 +46,22 @@ public class iConomyDeath extends JavaPlugin {
     public static PermissionHandler Permissions;
     
     private Configuration config;
+    private PluginManager pm;
     
-    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
-    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+    private iConomyDeathPlayerListener playerListener;
+    
+    private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
  
     // Config variables
     public double Amount = 64;
     
     public void onEnable() {
+    	pm = getServer().getPluginManager();
     	config = getConfiguration();
     	Server = getServer();
         PluginListener = new PluginListener();
+        
+        playerListener = new iConomyDeathPlayerListener(this);
     	
      	// Create default config if it doesn't exist.
         if (!(new File(getDataFolder(), "config.yml")).exists()) {
@@ -67,8 +72,8 @@ public class iConomyDeath extends JavaPlugin {
         loadConfig();
 
         // Register our events
-        PluginManager pm = getServer().getPluginManager();
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
+        
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
 
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -76,15 +81,9 @@ public class iConomyDeath extends JavaPlugin {
         setupPermissions();
     }
     
-    public void onDisable() {
-        // TODO: Place any custom disable code here
-
-        // NOTE: All registered events are automatically unregistered when a plugin is disabled
-
-        // EXAMPLE: Custom code, here we just output some info so we can check all is well
-        //System.out.println("Goodbye world!");
-    	
-    	System.out.println("");
+    public void onDisable() {   	
+    	PluginDescriptionFile pdfFile = this.getDescription();
+    	System.out.println(pdfFile.getName() + " Plugin disabled!");
     }
     
     private void loadConfig() {
