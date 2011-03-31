@@ -38,15 +38,19 @@ public class iConomyDeathPlayerListener extends PlayerListener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
     
-		if (iConomy.getBank().hasAccount(player.getName())) {
-			if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
+		if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
+			if (iConomy.getBank().hasAccount(player.getName())) {	
 				Account account = iConomy.getBank().getAccount(player.getName());
-				account.subtract(plugin.Amount);
-    
-				player.sendMessage(ChatColor.YELLOW + iConomy.getBank().format(plugin.Amount) + " was taken from your account because you were killed");
+				
+				if (account.hasEnough(plugin.Amount)) {
+					account.subtract(plugin.Amount);
+					player.sendMessage(ChatColor.YELLOW + "You died - " + iConomy.getBank().format(plugin.Amount) + " was taken from your account because you were killed.");
+				} else {
+					player.sendMessage(ChatColor.RED +  "You died - Can't take money from your account because you don't have enough money.");
+				}
+			} else {
+				player.sendMessage(ChatColor.RED + "You died - Can't take money from your account because you don't have oneCan't take money from your account because you do not have one.");
 			}
-		} else {
-			player.sendMessage(ChatColor.RED + "Can't take money from your account because you do not have one");
 		}
     }
 }

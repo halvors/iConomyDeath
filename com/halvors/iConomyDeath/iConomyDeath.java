@@ -24,10 +24,6 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
-<<<<<<< HEAD
-=======
-import org.bukkit.event.Event.Priority;
->>>>>>> 14afb3284828f1464539d4f36e462da7f36229f6
 import org.bukkit.event.Event;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
