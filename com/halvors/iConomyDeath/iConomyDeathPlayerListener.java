@@ -42,9 +42,9 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 			if (iConomy.getBank().hasAccount(player.getName())) {	
 				Account account = iConomy.getBank().getAccount(player.getName());
 				
-				if (account.hasEnough(plugin.Amount)) {
-					account.subtract(plugin.Amount);
-					player.sendMessage(ChatColor.YELLOW + "You died - " + iConomy.getBank().format(plugin.Amount) + " was taken from your account because you were killed.");
+				if (account.hasEnough(Config.Amount)) {
+					account.subtract(Config.Amount);
+					player.sendMessage(ChatColor.YELLOW + "You died - " + iConomy.getBank().format(Config.Amount) + " was taken from your account because you were killed.");
 				} else {
 					player.sendMessage(ChatColor.RED +  "You died - Can't take money from your account because you don't have enough money.");
 				}

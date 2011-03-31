@@ -38,63 +38,54 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class iConomyDeath extends JavaPlugin {
+	public static String name;
+	public static String codename;
+	public static String version;
+	
+	private PluginManager pm;
+	private PluginDescriptionFile pdfFile;
 	private static PluginListener PluginListener = null;
     private static iConomy iConomy = null;
     private static Server Server = null;
 
     public static PermissionHandler Permissions;
     
-    private Configuration config;
-    private PluginManager pm;
-    
     private iConomyDeathPlayerListener playerListener;
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
  
-    // Config variables
-    public double Amount = 64;
+    public iConomyDeath() {
+    }
     
     public void onEnable() {
     	pm = getServer().getPluginManager();
-    	config = getConfiguration();
+    	pdfFile = this.getDescription();
     	Server = getServer();
         PluginListener = new PluginListener();
         
         playerListener = new iConomyDeathPlayerListener(this);
     	
-     	// Create default config if it doesn't exist.
-        if (!(new File(getDataFolder(), "config.yml")).exists()) {
-        	defaultConfig();
-        }
+        // Load name and version from pdfFile
+        name = pdfFile.getName();
+        version = pdfFile.getVersion();
         
         // Load Configuration Settings
-        loadConfig();
+        Config.getConfig(getDataFolder());
 
         // Register our events
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
-
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+        
+        System.out.println(name + " version " + version + " is enabled!");
+        
         setupPermissions();
     }
     
     public void onDisable() {   	
-    	PluginDescriptionFile pdfFile = this.getDescription();
-    	System.out.println(pdfFile.getName() + " Plugin disabled!");
+    	System.out.println(name + " Plugin disabled!");
     }
     
-    private void loadConfig() {
-    	config.load();
-    	Amount = config.getDouble("Amount", Amount);
-    }
-
-    private void defaultConfig() {
-    	config.setProperty("Amount", Amount);
-    	config.save();
-    }
-    	
     private void setupPermissions() {
     	Plugin permissions = this.getServer().getPluginManager().getPlugin("Permissions");
 

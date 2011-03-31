@@ -37,7 +37,7 @@ public class PluginListener extends ServerListener {
             if (iConomy != null) {
                 if (iConomy.isEnabled()) {
                 	iConomyDeath.setiConomy((iConomy)iConomy);
-                    System.out.println("[iConomyDeath] Successfully linked with iConomy.");
+                    System.out.println("[" + iConomyDeath.name + "] Successfully linked with iConomy.");
                 }
             }
         }
