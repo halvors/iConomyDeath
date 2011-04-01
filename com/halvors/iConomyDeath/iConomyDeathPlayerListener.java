@@ -21,7 +21,6 @@ package com.halvors.iConomyDeath;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -44,12 +43,19 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 				
 				if (account.hasEnough(Config.Amount)) {
 					account.subtract(Config.Amount);
-					player.sendMessage(ChatColor.YELLOW + "You died - " + iConomy.getBank().format(Config.Amount) + " was taken from your account because you were killed.");
+					
+					player.sendMessage(Config.MoneyTaken.replaceAll("<amount>", iConomy.getBank().format(Config.Amount)));
+					
+					//player.sendMessage(ChatColor.YELLOW + "You died - " + iConomy.getBank().format(Config.Amount) + " was taken from your account because you were killed.");
 				} else {
-					player.sendMessage(ChatColor.RED +  "You died - Can't take money from your account because you don't have enough money.");
+					player.sendMessage(Config.NotEnoughMoney);
+					
+					//player.sendMessage(ChatColor.RED + "You died - Can't take money from your account because you don't have enough money.");
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + "You died - Can't take money from your account because you don't have oneCan't take money from your account because you do not have one.");
+				player.sendMessage(Config.DontHaveAccount);
+				
+				//layer.sendMessage(ChatColor.RED + "You died - Can't take money from your account because you don't have oneCan't take money from your account because you do not have one.");
 			}
 		}
     }
