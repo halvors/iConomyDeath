@@ -50,8 +50,10 @@ public class iConomyDeath extends JavaPlugin {
     public static PermissionHandler Permissions;
     
     private iConomyDeathPlayerListener playerListener;
+    private iConomyDeathEntityListener entityListener;
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+	
  
     public iConomyDeath() {
     }
@@ -63,6 +65,7 @@ public class iConomyDeath extends JavaPlugin {
         PluginListener = new PluginListener();
         
         playerListener = new iConomyDeathPlayerListener(this);
+        entityListener = new iConomyDeathEntityListener(this);
     	
         // Load name and version from pdfFile
         name = pdfFile.getName();
@@ -74,15 +77,18 @@ public class iConomyDeath extends JavaPlugin {
         // Register our events
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
         
-        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
         
-        System.out.println(name + " version " + version + " is enabled!");
+        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
+        
+        System.out.println("[" + name + "] version " + version + " is enabled!");
         
         setupPermissions();
     }
     
     public void onDisable() {   	
-    	System.out.println(name + " Plugin disabled!");
+    	System.out.println("[" + name + "] Plugin disabled!");
     }
     
     private void setupPermissions() {

@@ -37,7 +37,7 @@ public class Config {
         
         // Setup defaults
         Percentage = true;
-        Amount = 1.0;
+        Amount = 10.0;
         
         MoneyTaken = "<amount> was taken from your account because you died.";
         NotEnoughMoney = "Can't take money from your account because you don't have enough money.";

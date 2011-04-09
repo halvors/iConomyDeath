@@ -35,9 +35,9 @@ public class iConomyDeathPlayerListener extends PlayerListener {
     }
     
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
-		
-		if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
+    	Player player = event.getPlayer();
+    	
+    	if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
 			if (iConomy.getBank().hasAccount(player.getName())) {	
 				Account account = iConomy.getBank().getAccount(player.getName());
 				double amount;
