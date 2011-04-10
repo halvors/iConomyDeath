@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Halvor Lyche Strandvoll.
+ * Copyright (C) 2011 halvors <halvors@skymiastudios.com>.
  *
  * This file is part of iConomyDeath.
  *
@@ -42,20 +42,20 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 				Account account = iConomy.getBank().getAccount(player.getName());
 				double amount;
 				
-				if (Config.Percentage) {
-					amount = Config.Amount * account.getBalance() / 100;
+				if (plugin.getConfigManager().UsePercentage) {
+					amount = plugin.getConfigManager().Value * account.getBalance() / 100;
 				} else {
-					amount = Config.Amount;
+					amount = plugin.getConfigManager().Value;
 				}
 				
 				if (account.hasEnough(amount)) {
 					account.subtract(amount);
-					player.sendMessage(Config.MoneyTaken.replaceAll("<amount>", iConomy.getBank().format(amount)));
+					player.sendMessage(ChatColor.GREEN + plugin.getConfigManager().Money_was_taken_from_your_account.replaceAll("<money>", iConomy.getBank().format(amount)));
 				} else {
-					player.sendMessage(Config.NotEnoughMoney);
+					player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_enough_money);
 				}
 			} else {
-				player.sendMessage(Config.DontHaveAccount);
+				player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_a_account);
 			}
 		}
     }

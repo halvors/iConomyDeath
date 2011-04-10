@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Halvor Lyche Strandvoll.
+ * Copyright (C) 2011 halvors <halvors@skymiastudios.com>.
  *
  * This file is part of iConomyDeath.
  *
@@ -19,8 +19,8 @@
 
 package com.halvors.iConomyDeath;
 
-import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
@@ -36,33 +36,35 @@ import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
+import com.halvors.iConomyDeath.util.ConfigManager;
+
 public class iConomyDeath extends JavaPlugin {
 	public static String name;
-	public static String codename;
+	//public static String codename;
 	public static String version;
 	
+	private Logger log = Logger.getLogger("Minecraft");
 	private PluginManager pm;
 	private PluginDescriptionFile pdfFile;
+	
 	private static PluginListener PluginListener = null;
     private static iConomy iConomy = null;
     private static Server Server = null;
 
     public static PermissionHandler Permissions;
     
+    private ConfigManager configManager;
+    
     private iConomyDeathPlayerListener playerListener;
     private iConomyDeathEntityListener entityListener;
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
-	
- 
-    public iConomyDeath() {
-    }
     
     public void onEnable() {
     	pm = getServer().getPluginManager();
     	pdfFile = this.getDescription();
     	Server = getServer();
-        PluginListener = new PluginListener();
+        PluginListener = new PluginListener(this);
         
         playerListener = new iConomyDeathPlayerListener(this);
         entityListener = new iConomyDeathEntityListener(this);
@@ -71,24 +73,34 @@ public class iConomyDeath extends JavaPlugin {
         name = pdfFile.getName();
         version = pdfFile.getVersion();
         
-        // Load Configuration Settings
-        Config.getConfig(getDataFolder());
+        // Load Configuration
+        try {
+        	configManager = new ConfigManager(this);
+            configManager.load();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log(Level.INFO, "Error encountered while loading data. Disabling " + name);
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Register our events
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
         
-        //pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
         
-        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
-        pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
+        //pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
         
-        System.out.println("[" + name + "] version " + version + " is enabled!");
+        
+        
+        log(Level.INFO, "version " + version + " is enabled!");
         
         setupPermissions();
     }
     
     public void onDisable() {   	
-    	System.out.println("[" + name + "] Plugin disabled!");
+    	log(Level.INFO, "Plugin disabled!");
     }
     
     private void setupPermissions() {
@@ -98,7 +110,7 @@ public class iConomyDeath extends JavaPlugin {
         	if (permissions != null) {
             	Permissions = ((Permissions)permissions).getHandler();
             } else {
-            	System.out.println("Permission system not detected, defaulting to OP");
+            	log(Level.INFO, "Permission system not detected, defaulting to OP");
             }
         }
     }
@@ -138,5 +150,13 @@ public class iConomyDeath extends JavaPlugin {
 
     public void setDebugging(final Player player, final boolean value) {
         debugees.put(player, value);
+    }
+    
+    public void log(Level level, String msg) {
+        this.log.log(level, "[" + name + "] " + msg);
+    }
+    
+    public ConfigManager getConfigManager() {
+    	return configManager;
     }
 }

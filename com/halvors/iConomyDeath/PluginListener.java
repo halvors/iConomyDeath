@@ -19,6 +19,8 @@
 
 package com.halvors.iConomyDeath;
 
+import java.util.logging.Level;
+
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
@@ -26,7 +28,10 @@ import org.bukkit.plugin.Plugin;
 import com.nijiko.coelho.iConomy.iConomy;
 
 public class PluginListener extends ServerListener {
-    public PluginListener() {
+	private iConomyDeath plugin;
+	
+    public PluginListener(iConomyDeath instance) {
+    	this.plugin = instance;
 	}
 
     @Override
@@ -37,7 +42,7 @@ public class PluginListener extends ServerListener {
             if (iConomy != null) {
                 if (iConomy.isEnabled()) {
                 	iConomyDeath.setiConomy((iConomy)iConomy);
-                    System.out.println("[" + iConomyDeath.name + "] Successfully linked with iConomy.");
+                	plugin.log(Level.INFO, "Successfully linked with iConomy.");
                 }
             }
         }
