@@ -47,7 +47,6 @@ public class iConomyDeath extends JavaPlugin {
 	private PluginManager pm;
 	private PluginDescriptionFile pdfFile;
 	
-	private static PluginListener PluginListener = null;
     private static iConomy iConomy = null;
     private static Server Server = null;
 
@@ -56,7 +55,7 @@ public class iConomyDeath extends JavaPlugin {
     private ConfigManager configManager;
     
     private iConomyDeathPlayerListener playerListener;
-    private iConomyDeathEntityListener entityListener;
+    private iConomyDeathServerListener serverListener;
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     
@@ -64,10 +63,9 @@ public class iConomyDeath extends JavaPlugin {
     	pm = getServer().getPluginManager();
     	pdfFile = this.getDescription();
     	Server = getServer();
-        PluginListener = new PluginListener(this);
-        
+    	
         playerListener = new iConomyDeathPlayerListener(this);
-        entityListener = new iConomyDeathEntityListener(this);
+        serverListener = new iConomyDeathServerListener(this);
     	
         // Load name and version from pdfFile
         name = pdfFile.getName();
@@ -85,14 +83,9 @@ public class iConomyDeath extends JavaPlugin {
         }
 
         // Register our events
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, PluginListener, Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
-        
-        //pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
-        //pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
-        
-        
         
         log(Level.INFO, "version " + version + " is enabled!");
         
