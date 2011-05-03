@@ -25,9 +25,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 import com.halvors.iConomyDeath.iConomyDeath;
+
 
 public class ConfigManager {
 	private final iConomyDeath plugin;
@@ -41,7 +41,7 @@ public class ConfigManager {
 	// Messages
 	public String Money_was_taken_from_your_account;
 	public String You_does_not_have_enough_money;
-	public String You_does_not_have_a_account;
+	public String You_does_not_have_an_account;
 	
 	public ConfigManager(iConomyDeath plugin) {
 		this.plugin = plugin;
@@ -51,7 +51,7 @@ public class ConfigManager {
 	
 	// Load configuration
 	public void load() {
-		checkConfig();
+		checkConfig(configFile);
 		
         Configuration config = new Configuration(configFile);
         config.load();
@@ -59,14 +59,13 @@ public class ConfigManager {
         // General
 		UsePercentage = config.getBoolean("UsePercentage", UsePercentage);
 		Value = config.getDouble("Value", Value);
-
+		
         // Messages
-		ConfigurationNode messages = config.getNode("Messages");
-		Money_was_taken_from_your_account = messages.getString("Money_was_taken_from_your_account", Money_was_taken_from_your_account);
-		You_does_not_have_enough_money = messages.getString("You_does_not_have_enough_money", You_does_not_have_enough_money);
-		You_does_not_have_a_account = messages.getString("You_does_not_have_a_account", You_does_not_have_a_account);
+		Money_was_taken_from_your_account = config.getString("Messages.Money_was_taken_from_your_account", Money_was_taken_from_your_account);
+		You_does_not_have_enough_money = config.getString("Messages.You_does_not_have_enough_money", You_does_not_have_enough_money);
+		You_does_not_have_an_account = config.getString("Messages.You_does_not_have_an_account", You_does_not_have_an_account);
     }
-
+	
 	// Save configuration
 	public void save() {
 		Configuration config = new Configuration(configFile);
@@ -74,11 +73,11 @@ public class ConfigManager {
 		// General
     	config.setProperty("UsePercentage", UsePercentage);
     	config.setProperty("Value", Value);
-
+    	
         // Messages
         config.setProperty("Messages.Money_was_taken_from_your_account", Money_was_taken_from_your_account);
         config.setProperty("Messages.You_does_not_have_enough_money", You_does_not_have_enough_money);
-        config.setProperty("Messages.You_does_not_have_a_account", You_does_not_have_a_account);
+        config.setProperty("Messages.You_does_not_have_an_account", You_does_not_have_an_account);
 		
 		config.save();
 	}
@@ -88,12 +87,12 @@ public class ConfigManager {
         load();
     }
 	
-	private void checkConfig() {
-        if (!configFile.exists()) {
+	private void checkConfig(File config) {
+        if (!config.exists()) {
             try {
-                configFile.getParentFile().mkdir();
-                configFile.createNewFile();
-                OutputStream output = new FileOutputStream(configFile, false);
+                config.getParentFile().mkdir();
+                config.createNewFile();
+                OutputStream output = new FileOutputStream(config, false);
                 InputStream input = ConfigManager.class.getResourceAsStream("config.yml");
                 byte[] buf = new byte[8192];
                 while (true) {

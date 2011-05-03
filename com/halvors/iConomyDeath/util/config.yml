@@ -2,6 +2,6 @@ UsePercentage: true
 Value: 1.0
 
 Messages:
-    Money_was_taken_from_your_account: '<money> was taken from your account because you died.'
-    You_does_not_have_enough_money: 'Can not take money from your account because you not have enough money.'
-    You_does_not_have_a_account: 'Can not take money from your account because you not have a account.'
+    Money_was_taken_from_your_account: <money> was taken from your account because you died.
+    You_does_not_have_enough_money: Can't take money from your account because you not have enough money.
+    You_does_not_have_an_account: Can't take money from your account because you not have an account.

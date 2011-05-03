@@ -24,19 +24,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.halvors.iConomyDeath.util.ConfigManager;
 import com.iConomy.iConomy;
 import com.iConomy.system.Holdings;
 
 public class iConomyDeathPlayerListener extends PlayerListener {
     private final iConomyDeath plugin;
-    
-    private ConfigManager configManager;
 
     public iConomyDeathPlayerListener(iConomyDeath plugin) {
         this.plugin = plugin;
-        
-        configManager = plugin.getConfigManager();
     }
     
     @Override
@@ -46,7 +41,7 @@ public class iConomyDeathPlayerListener extends PlayerListener {
     	if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
     		if (iConomy.hasAccount(player.getName())) {
     			Holdings holdings =  iConomy.getAccount(player.getName()).getHoldings();
-				double amount;
+				double amount = 0;
 				
 				if (plugin.getConfigManager().UsePercentage) {
 					amount = plugin.getConfigManager().Value * holdings.balance() / 100;
@@ -57,12 +52,12 @@ public class iConomyDeathPlayerListener extends PlayerListener {
 				if (holdings.hasEnough(amount)) {
 					holdings.subtract(amount);
 					
-					player.sendMessage(ChatColor.GREEN + configManager.Money_was_taken_from_your_account.replaceAll("<money>", iConomy.format(amount)));
+					player.sendMessage(ChatColor.GREEN + plugin.getConfigManager().Money_was_taken_from_your_account.replaceAll("<money>", iConomy.format(amount)));
 				} else {
-					player.sendMessage(ChatColor.RED + configManager.You_does_not_have_enough_money);
+					player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_enough_money);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + configManager.You_does_not_have_a_account);
+				player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_an_account);
 			}
 		}
     }
