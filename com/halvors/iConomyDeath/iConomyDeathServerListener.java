@@ -21,28 +21,39 @@ package com.halvors.iConomyDeath;
 
 import java.util.logging.Level;
 
-import org.bukkit.event.server.ServerListener;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
-import com.nijiko.coelho.iConomy.iConomy;
+import com.iConomy.iConomy;
 
 public class iConomyDeathServerListener extends ServerListener {
-	private iConomyDeath plugin;
-	
-    public iConomyDeathServerListener(iConomyDeath instance) {
-    	plugin = instance;
-	}
+    private iConomyDeath plugin;
+
+    public iConomyDeathServerListener(iConomyDeath plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public void onPluginDisable(PluginDisableEvent event) {
+        if (plugin.iConomy != null) {
+            if (event.getPlugin().getDescription().getName().equals("iConomy")) {
+                plugin.iConomy = null;
+                plugin.log(Level.INFO, "un-hooked from iConomy.");
+            }
+        }
+    }
 
     @Override
     public void onPluginEnable(PluginEnableEvent event) {
-        if (iConomyDeath.getiConomy() == null) {
-            Plugin iConomy = iConomyDeath.getBukkitServer().getPluginManager().getPlugin("iConomy");
+        if (plugin.iConomy == null) {
+            Plugin iConomy = plugin.getServer().getPluginManager().getPlugin("iConomy");
 
             if (iConomy != null) {
                 if (iConomy.isEnabled()) {
-                	iConomyDeath.setiConomy((iConomy)iConomy);
-                	plugin.log(Level.INFO, "Successfully linked with iConomy.");
+                    plugin.iConomy = (iConomy)iConomy;
+                    plugin.log(Level.INFO, "hooked into iConomy.");
                 }
             }
         }

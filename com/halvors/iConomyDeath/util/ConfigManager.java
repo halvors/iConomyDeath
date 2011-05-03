@@ -30,7 +30,7 @@ import org.bukkit.util.config.ConfigurationNode;
 import com.halvors.iConomyDeath.iConomyDeath;
 
 public class ConfigManager {
-	private iConomyDeath plugin;
+	private final iConomyDeath plugin;
 	
 	private File configFile;
 	
@@ -43,10 +43,10 @@ public class ConfigManager {
 	public String You_does_not_have_enough_money;
 	public String You_does_not_have_a_account;
 	
-	public ConfigManager(iConomyDeath instance) {
-		this.plugin = instance;
+	public ConfigManager(iConomyDeath plugin) {
+		this.plugin = plugin;
 		
-	    this.configFile = new File(plugin.getDataFolder(), "config.yml");
+	    configFile = new File(plugin.getDataFolder(), "config.yml");
 	}
 	
 	// Load configuration
@@ -56,14 +56,29 @@ public class ConfigManager {
         Configuration config = new Configuration(configFile);
         config.load();
         
-        loadGlobals(config);
+        // General
+		UsePercentage = config.getBoolean("UsePercentage", UsePercentage);
+		Value = config.getDouble("Value", Value);
+
+        // Messages
+		ConfigurationNode messages = config.getNode("Messages");
+		Money_was_taken_from_your_account = messages.getString("Money_was_taken_from_your_account", Money_was_taken_from_your_account);
+		You_does_not_have_enough_money = messages.getString("You_does_not_have_enough_money", You_does_not_have_enough_money);
+		You_does_not_have_a_account = messages.getString("You_does_not_have_a_account", You_does_not_have_a_account);
     }
 
 	// Save configuration
 	public void save() {
 		Configuration config = new Configuration(configFile);
 		
-		saveGlobals(config);
+		// General
+    	config.setProperty("UsePercentage", UsePercentage);
+    	config.setProperty("Value", Value);
+
+        // Messages
+        config.setProperty("Messages.Money_was_taken_from_your_account", Money_was_taken_from_your_account);
+        config.setProperty("Messages.You_does_not_have_enough_money", You_does_not_have_enough_money);
+        config.setProperty("Messages.You_does_not_have_a_account", You_does_not_have_a_account);
 		
 		config.save();
 	}
@@ -94,34 +109,5 @@ public class ConfigManager {
                 e.printStackTrace();
             }
         }
-    }
-	
-	private void loadGlobals(Configuration config) {
-		// General
-		this.UsePercentage = config.getBoolean("UsePercentage", UsePercentage);
-		this.Value = config.getDouble("Value", Value);
-
-        // Messages
-		ConfigurationNode messages = config.getNode("Messages");
-		this.Money_was_taken_from_your_account = messages.getString("Money_was_taken_from_your_account", this.Money_was_taken_from_your_account);
-		
-		this.You_does_not_have_enough_money = messages.getString("You_does_not_have_enough_money", this.You_does_not_have_enough_money);
-		
-		this.You_does_not_have_a_account = messages.getString("You_does_not_have_a_account", this.You_does_not_have_a_account);
-	}
-
-    private void saveGlobals(Configuration config) {
-    	// General
-    	config.setProperty("UsePercentage", this.UsePercentage);
-    	config.setProperty("Value", this.Value);
-
-        // Messages
-        config.setProperty("Messages.Money_was_taken_from_your_account", this.Money_was_taken_from_your_account);
-        
-        config.setProperty("Messages.You_does_not_have_enough_money", this.You_does_not_have_enough_money);
-        
-        config.setProperty("Messages.You_does_not_have_a_account", this.You_does_not_have_a_account);
-        
-        config.save();
     }
 }

@@ -25,65 +25,58 @@ import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.Server;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import com.nijiko.coelho.iConomy.iConomy;
+import com.halvors.iConomyDeath.util.ConfigManager;
+import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
-import com.halvors.iConomyDeath.util.ConfigManager;
-
 public class iConomyDeath extends JavaPlugin {
 	public static String name;
-	//public static String codename;
 	public static String version;
 	
-	private Logger log = Logger.getLogger("Minecraft");
-	private PluginManager pm;
-	private PluginDescriptionFile pdfFile;
+	private final Logger log = Logger.getLogger("Minecraft");
+	private final PluginManager pm = this.getServer().getPluginManager();
+	private final PluginDescriptionFile pdfFile = this.getDescription();
 	
-    private static iConomy iConomy = null;
-    private static Server Server = null;
+	public iConomy iConomy = null;
 
     public static PermissionHandler Permissions;
     
-    private ConfigManager configManager;
+    private final ConfigManager configManager = new ConfigManager(this);
     
-    private iConomyDeathPlayerListener playerListener;
-    private iConomyDeathServerListener serverListener;
+    private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
+    private final iConomyDeathServerListener serverListener = new iConomyDeathServerListener(this);
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     
+    public iConomyDeath() {
+    	
+    }
+    
     public void onEnable() {
-    	pm = getServer().getPluginManager();
-    	pdfFile = this.getDescription();
-    	Server = getServer();
-    	
-        playerListener = new iConomyDeathPlayerListener(this);
-        serverListener = new iConomyDeathServerListener(this);
-    	
         // Load name and version from pdfFile
         name = pdfFile.getName();
         version = pdfFile.getVersion();
         
         // Load Configuration
         try {
-        	configManager = new ConfigManager(this);
             configManager.load();
         } catch (Exception e) {
             e.printStackTrace();
             log(Level.INFO, "Error encountered while loading data. Disabling " + name);
-            this.getServer().getPluginManager().disablePlugin(this);
+            pm.disablePlugin(this);
+            
             return;
         }
 
         // Register our events
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Monitor, this);
         
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
         
@@ -92,7 +85,7 @@ public class iConomyDeath extends JavaPlugin {
         setupPermissions();
     }
     
-    public void onDisable() {   	
+    public void onDisable() {
     	log(Level.INFO, "Plugin disabled!");
     }
     
@@ -114,23 +107,6 @@ public class iConomyDeath extends JavaPlugin {
         } else {
             return p.isOp();
         }
-    }
-    
-    public static Server getBukkitServer() {
-        return Server;
-    }
-
-    public static iConomy getiConomy() {
-        return iConomy;
-    }
-    
-    public static boolean setiConomy(iConomy plugin) {
-        if (iConomy == null) {
-            iConomy = plugin;
-        } else {
-            return false;
-        }
-        return true;
     }
     
     public boolean isDebugging(final Player player) {

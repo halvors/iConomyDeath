@@ -24,38 +24,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.nijiko.coelho.iConomy.iConomy;
-import com.nijiko.coelho.iConomy.system.Account;
+import com.halvors.iConomyDeath.util.ConfigManager;
+import com.iConomy.iConomy;
+import com.iConomy.system.Holdings;
 
 public class iConomyDeathPlayerListener extends PlayerListener {
     private final iConomyDeath plugin;
+    
+    private ConfigManager configManager;
 
-    public iConomyDeathPlayerListener(iConomyDeath instance) {
-        plugin = instance;
+    public iConomyDeathPlayerListener(iConomyDeath plugin) {
+        this.plugin = plugin;
+        
+        configManager = plugin.getConfigManager();
     }
     
+    @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
     	Player player = event.getPlayer();
     	
     	if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
-			if (iConomy.getBank().hasAccount(player.getName())) {	
-				Account account = iConomy.getBank().getAccount(player.getName());
+    		if (iConomy.hasAccount(player.getName())) {
+    			Holdings holdings =  iConomy.getAccount(player.getName()).getHoldings();
 				double amount;
 				
 				if (plugin.getConfigManager().UsePercentage) {
-					amount = plugin.getConfigManager().Value * account.getBalance() / 100;
+					amount = plugin.getConfigManager().Value * holdings.balance() / 100;
 				} else {
 					amount = plugin.getConfigManager().Value;
 				}
 				
-				if (account.hasEnough(amount)) {
-					account.subtract(amount);
-					player.sendMessage(ChatColor.GREEN + plugin.getConfigManager().Money_was_taken_from_your_account.replaceAll("<money>", iConomy.getBank().format(amount)));
+				if (holdings.hasEnough(amount)) {
+					holdings.subtract(amount);
+					
+					player.sendMessage(ChatColor.GREEN + configManager.Money_was_taken_from_your_account.replaceAll("<money>", iConomy.format(amount)));
 				} else {
-					player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_enough_money);
+					player.sendMessage(ChatColor.RED + configManager.You_does_not_have_enough_money);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_a_account);
+				player.sendMessage(ChatColor.RED + configManager.You_does_not_have_a_account);
 			}
 		}
     }
