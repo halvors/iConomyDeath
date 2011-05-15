@@ -29,7 +29,7 @@ import org.bukkit.plugin.Plugin;
 import com.iConomy.iConomy;
 
 public class iConomyDeathServerListener extends ServerListener {
-    private iConomyDeath plugin;
+    private final iConomyDeath plugin;
 
     public iConomyDeathServerListener(iConomyDeath plugin) {
         this.plugin = plugin;
