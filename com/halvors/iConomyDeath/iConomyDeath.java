@@ -30,10 +30,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.halvors.iConomyDeath.listeners.iConomyDeathPlayerListener;
+import com.halvors.iConomyDeath.listeners.iConomyDeathServerListener;
 import com.halvors.iConomyDeath.util.ConfigManager;
 import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import com.nijikokun.register.payment.Method;
 
 public class iConomyDeath extends JavaPlugin {
 	public static String name;
@@ -43,7 +46,7 @@ public class iConomyDeath extends JavaPlugin {
 	private PluginManager pm;
 	private PluginDescriptionFile pdfFile;
 	
-	public iConomy iConomy = null;
+    public Method method = null;
 
     public static PermissionHandler Permissions;
     
@@ -53,10 +56,6 @@ public class iConomyDeath extends JavaPlugin {
     private final iConomyDeathServerListener serverListener = new iConomyDeathServerListener(this);
     
     private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
-    
-    public iConomyDeath() {
-    	
-    }
     
     public void onEnable() {
     	pm = this.getServer().getPluginManager();
@@ -79,10 +78,10 @@ public class iConomyDeath extends JavaPlugin {
         }
 
         // Register our events
+        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
+        
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Event.Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Event.Priority.Monitor, this);
-        
-        pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
         
         log(Level.INFO, "version " + version + " is enabled!");
         
@@ -105,7 +104,7 @@ public class iConomyDeath extends JavaPlugin {
         }
     }
 
-    public static boolean hasPermissions(Player p, String s) {
+    public boolean hasPermissions(Player p, String s) {
         if (Permissions != null) {
             return Permissions.has(p, s);
         } else {
@@ -131,5 +130,9 @@ public class iConomyDeath extends JavaPlugin {
     
     public ConfigManager getConfigManager() {
     	return configManager;
+    }
+    
+    public Method getMethod() {
+    	return method;
     }
 }

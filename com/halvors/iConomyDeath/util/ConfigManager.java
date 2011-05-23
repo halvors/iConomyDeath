@@ -28,7 +28,6 @@ import org.bukkit.util.config.Configuration;
 
 import com.halvors.iConomyDeath.iConomyDeath;
 
-
 public class ConfigManager {
 	private final iConomyDeath plugin;
 	
@@ -43,7 +42,7 @@ public class ConfigManager {
 	public String You_does_not_have_enough_money;
 	public String You_does_not_have_an_account;
 	
-	public ConfigManager(iConomyDeath plugin) {
+	public ConfigManager(final iConomyDeath plugin) {
 		this.plugin = plugin;
 		
 	    configFile = new File(plugin.getDataFolder(), "config.yml");

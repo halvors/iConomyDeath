@@ -17,47 +17,55 @@
  * along with iConomyDeath.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.halvors.iConomyDeath;
+package com.halvors.iConomyDeath.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.iConomy.iConomy;
-import com.iConomy.system.Holdings;
+import com.halvors.iConomyDeath.iConomyDeath;
+import com.halvors.iConomyDeath.util.ConfigManager;
+import com.nijikokun.register.payment.Method;
+import com.nijikokun.register.payment.Method.MethodAccount;
 
 public class iConomyDeathPlayerListener extends PlayerListener {
     private final iConomyDeath plugin;
-
-    public iConomyDeathPlayerListener(iConomyDeath plugin) {
+    private final ConfigManager configManager;
+    private final Method economy;
+    
+    public iConomyDeathPlayerListener(final iConomyDeath plugin) {
         this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
+        this.economy = plugin.getMethod();
     }
     
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
     	Player player = event.getPlayer();
     	
-    	if (iConomyDeath.hasPermissions(player, "iConomyDeath.use")) {
-    		if (iConomy.hasAccount(player.getName())) {
-    			Holdings holdings =  iConomy.getAccount(player.getName()).getHoldings();
+    	if (plugin.hasPermissions(player, "iConomyDeath.use")) {
+    		String name = player.getName();
+    		
+    		if ((economy != null) && (economy.hasAccount(name))) {
+    			MethodAccount account = economy.getAccount(name);
 				double amount = 0;
 				
-				if (plugin.getConfigManager().UsePercentage) {
-					amount = plugin.getConfigManager().Value * holdings.balance() / 100;
+				if (configManager.UsePercentage) {
+					amount = configManager.Value * account.balance() / 100;
 				} else {
-					amount = plugin.getConfigManager().Value;
+					amount = configManager.Value;
 				}
 				
-				if (holdings.hasEnough(amount)) {
-					holdings.subtract(amount);
+				if (account.hasEnough(amount)) {
+					account.subtract(amount);
 					
-					player.sendMessage(ChatColor.GREEN + plugin.getConfigManager().Money_was_taken_from_your_account.replaceAll("<money>", iConomy.format(amount)));
+					player.sendMessage(ChatColor.GREEN + configManager.Money_was_taken_from_your_account.replaceAll("<money>", economy.format(amount)));
 				} else {
-					player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_enough_money);
+					player.sendMessage(ChatColor.RED + configManager.You_does_not_have_enough_money);
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + plugin.getConfigManager().You_does_not_have_an_account);
+				player.sendMessage(ChatColor.RED + configManager.You_does_not_have_an_account);
 			}
 		}
     }
