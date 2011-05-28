@@ -37,7 +37,7 @@ public class iConomyDeathPlayerListener extends PlayerListener {
     public iConomyDeathPlayerListener(final iConomyDeath plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
-        this.economy = plugin.getMethod();
+        this.economy = plugin.getEconomy();
     }
     
     @Override

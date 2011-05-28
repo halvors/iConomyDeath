@@ -26,6 +26,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 
 import com.halvors.iConomyDeath.iConomyDeath;
+import com.nijikokun.register.payment.Method;
 import com.nijikokun.register.payment.Methods;
 
 public class iConomyDeathServerListener extends ServerListener {
@@ -33,11 +34,14 @@ public class iConomyDeathServerListener extends ServerListener {
     // Let's say my plugins MAIN class is: Register.java
     // I would change "MyPlugin" to "Register"
     private final iConomyDeath plugin;
+    
     private Methods methods = null;
-
+    private Method economy;
+    
     public iConomyDeathServerListener(final iConomyDeath plugin) {
         this.plugin = plugin;
         this.methods = new Methods();
+        this.economy = plugin.getEconomy();
     }
 
     @Override
@@ -47,7 +51,7 @@ public class iConomyDeathServerListener extends ServerListener {
             Boolean check = methods.checkDisabled(event.getPlugin());
 
             if (check) {
-                plugin.method = null;
+                plugin.economy = null;
                 plugin.log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
             }
         }
@@ -60,8 +64,8 @@ public class iConomyDeathServerListener extends ServerListener {
             if (methods.setMethod(event.getPlugin())) {
                 // You might want to make this a public variable inside your MAIN class public Method Method = null;
                 // then reference it through this.plugin.Method so that way you can use it in the rest of your plugin ;)
-            	plugin.method = methods.getMethod();
-                plugin.log(Level.INFO, "Payment method found (" + plugin.method.getName() + " version: " + plugin.method.getVersion() + ")");
+            	plugin.economy = methods.getMethod();
+                plugin.log(Level.INFO, "Payment method found (" + economy.getName() + " version: " + economy.getVersion() + ")");
             }
         }
     }

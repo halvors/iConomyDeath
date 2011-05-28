@@ -46,7 +46,7 @@ public class iConomyDeath extends JavaPlugin {
 	private PluginManager pm;
 	private PluginDescriptionFile pdfFile;
 	
-    public Method method = null;
+    public Method economy = null;
 
     public static PermissionHandler Permissions;
     
@@ -132,7 +132,7 @@ public class iConomyDeath extends JavaPlugin {
     	return configManager;
     }
     
-    public Method getMethod() {
-    	return method;
+    public Method getEconomy() {
+    	return economy;
     }
 }
