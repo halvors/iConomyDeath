@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Halvor Lyche Strandvoll.
+ * Copyright (C) 2011 halvors <halvors@skymiastudios.com>.
  *
  * This file is part of iConomyDeath.
  *
@@ -30,23 +30,17 @@ import com.nijikokun.register.payment.Method;
 import com.nijikokun.register.payment.Methods;
 
 public class iConomyDeathServerListener extends ServerListener {
-    // Change "MyPlugin" to the name of your MAIN class file.
-    // Let's say my plugins MAIN class is: Register.java
-    // I would change "MyPlugin" to "Register"
     private final iConomyDeath plugin;
     
     private Methods methods = null;
-    private Method economy;
     
     public iConomyDeathServerListener(final iConomyDeath plugin) {
         this.plugin = plugin;
         this.methods = new Methods();
-        this.economy = plugin.getEconomy();
     }
 
     @Override
     public void onPluginDisable(PluginDisableEvent event) {
-        // Check to see if the plugin thats being disabled is the one we are using
         if (methods != null && methods.hasMethod()) {
             Boolean check = methods.checkDisabled(event.getPlugin());
 
@@ -59,13 +53,10 @@ public class iConomyDeathServerListener extends ServerListener {
 
     @Override
     public void onPluginEnable(PluginEnableEvent event) {
-        // Check to see if we need a payment method
         if (!methods.hasMethod()) {
             if (methods.setMethod(event.getPlugin())) {
-                // You might want to make this a public variable inside your MAIN class public Method Method = null;
-                // then reference it through this.plugin.Method so that way you can use it in the rest of your plugin ;)
             	plugin.economy = methods.getMethod();
-                plugin.log(Level.INFO, "Payment method found (" + economy.getName() + " version: " + economy.getVersion() + ")");
+                plugin.log(Level.INFO, "Payment method found (" + plugin.economy.getName() + " version: " + plugin.economy.getVersion() + ")");
             }
         }
     }

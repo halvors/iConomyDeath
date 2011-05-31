@@ -33,14 +33,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.halvors.iConomyDeath.listeners.iConomyDeathPlayerListener;
 import com.halvors.iConomyDeath.listeners.iConomyDeathServerListener;
 import com.halvors.iConomyDeath.util.ConfigManager;
-import com.iConomy.iConomy;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijikokun.register.payment.Method;
 
 public class iConomyDeath extends JavaPlugin {
-	public static String name;
-	public static String version;
+	public String name;
+	public String version;
 	
 	private final Logger log = Logger.getLogger("Minecraft");
 	private PluginManager pm;
@@ -55,7 +54,7 @@ public class iConomyDeath extends JavaPlugin {
     private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
     private final iConomyDeathServerListener serverListener = new iConomyDeathServerListener(this);
     
-    private HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+    private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     
     public void onEnable() {
     	pm = this.getServer().getPluginManager();

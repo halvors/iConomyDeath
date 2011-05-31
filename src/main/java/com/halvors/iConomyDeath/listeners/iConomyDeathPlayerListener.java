@@ -20,52 +20,57 @@
 package com.halvors.iConomyDeath.listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.halvors.iConomyDeath.iConomyDeath;
 import com.halvors.iConomyDeath.util.ConfigManager;
+import com.halvors.iConomyDeath.util.WorldConfig;
 import com.nijikokun.register.payment.Method;
 import com.nijikokun.register.payment.Method.MethodAccount;
 
 public class iConomyDeathPlayerListener extends PlayerListener {
     private final iConomyDeath plugin;
+    
     private final ConfigManager configManager;
-    private final Method economy;
     
     public iConomyDeathPlayerListener(final iConomyDeath plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
-        this.economy = plugin.getEconomy();
     }
     
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
     	Player player = event.getPlayer();
+    	World world = player.getWorld();
+    	WorldConfig worldConfig = plugin.getConfigManager().getWorldConfig(world);
+    	
+    	Method economy = plugin.getEconomy();
     	
     	if (plugin.hasPermissions(player, "iConomyDeath.use")) {
     		String name = player.getName();
     		
-    		if ((economy != null) && (economy.hasAccount(name))) {
-    			MethodAccount account = economy.getAccount(name);
+	    	if (economy.hasAccount(name)) {
+	    		MethodAccount account = economy.getAccount(name);
 				double amount = 0;
 				
-				if (configManager.UsePercentage) {
-					amount = configManager.Value * account.balance() / 100;
+				if (worldConfig.percentage) {
+					amount = worldConfig.value * account.balance() / 100;
 				} else {
-					amount = configManager.Value;
+					amount = worldConfig.value;
 				}
 				
 				if (account.hasEnough(amount)) {
 					account.subtract(amount);
 					
-					player.sendMessage(ChatColor.GREEN + configManager.Money_was_taken_from_your_account.replaceAll("<money>", economy.format(amount)));
+					player.sendMessage(ChatColor.GREEN + economy.format(amount) + " was taken from your account because you died.");
 				} else {
-					player.sendMessage(ChatColor.RED + configManager.You_does_not_have_enough_money);
+					player.sendMessage(ChatColor.RED + "Can't take money from you because you don't have enough money.");
 				}
 			} else {
-				player.sendMessage(ChatColor.RED + configManager.You_does_not_have_an_account);
+				player.sendMessage(ChatColor.RED + "Can't take money from you because you don't have an account.");
 			}
 		}
     }
