@@ -45,7 +45,7 @@ public class iConomyDeathPlayerListener extends PlayerListener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
     	Player player = event.getPlayer();
     	World world = player.getWorld();
-    	WorldConfig worldConfig = plugin.getConfigManager().getWorldConfig(world);
+    	WorldConfig worldConfig = configManager.getWorldConfig(world);
     	
     	Method economy = plugin.getEconomy();
     	

@@ -49,7 +49,7 @@ public class iConomyDeath extends JavaPlugin {
 
     public static PermissionHandler Permissions;
     
-    private ConfigManager configManager;
+    private final ConfigManager configManager = new ConfigManager(this);
     
     private final iConomyDeathPlayerListener playerListener = new iConomyDeathPlayerListener(this);
     private final iConomyDeathServerListener serverListener = new iConomyDeathServerListener(this);
@@ -65,16 +65,7 @@ public class iConomyDeath extends JavaPlugin {
         version = pdfFile.getVersion();
         
         // Load Configuration
-        try {
-        	configManager = new ConfigManager(this);
-            configManager.load();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log(Level.INFO, "Error encountered while loading data. Disabling " + name);
-            pm.disablePlugin(this);
-            
-            return;
-        }
+        configManager.load();
 
         // Register our events
         pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Normal, this);
@@ -88,6 +79,8 @@ public class iConomyDeath extends JavaPlugin {
     }
     
     public void onDisable() {
+    	configManager.save();
+    	
     	log(Level.INFO, "Plugin disabled!");
     }
     

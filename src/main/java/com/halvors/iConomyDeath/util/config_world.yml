@@ -4,4 +4,4 @@
 # corresponding world.
 
 percentage: true # Enable to use percentage or disable for simple amount.
-value: 0.1 # Amount or percentage.
+value: 1.0 # Amount or percentage.
