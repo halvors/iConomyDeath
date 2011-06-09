@@ -26,7 +26,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 
 import com.halvors.iConomyDeath.iConomyDeath;
-import com.nijikokun.register.payment.Method;
 import com.nijikokun.register.payment.Methods;
 
 public class iConomyDeathServerListener extends ServerListener {

@@ -32,7 +32,7 @@ import com.halvors.iConomyDeath.iConomyDeath;
  * @author halvors
  */
 public class WorldConfig {
-	private final iConomyDeath plugin;
+//	private final iConomyDeath plugin;
 	
 	private ConfigManager configManager;
 	
@@ -44,14 +44,8 @@ public class WorldConfig {
     public double value;
     /* Configuration data end */
 
-    /**
-     * Construct the object.
-     *
-     * @param plugin
-     * @param worldName
-     */
     public WorldConfig(final iConomyDeath plugin, String worldName) {
-    	this.plugin = plugin;
+//    	this.plugin = plugin;
     	this.configManager = plugin.getConfigManager();
     	this.worldName = worldName;
     	
